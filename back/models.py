@@ -1,20 +1,24 @@
 from typing import Optional
+from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, DeclarativeBase, mapped_column, relationship
 
 
 class Base(DeclarativeBase):
     pass
 
 
-class Contact(Base):
+db = SQLAlchemy(model_class=Base)
+
+
+class Contact(db.Model):
     __tablename__ = "contacts"
     id: Mapped[int] = mapped_column(primary_key=True)
 
     fullname: Mapped[str]
     firstname: Mapped[str]
     lastname: Mapped[str]
-    email: Mapped[str]
+    email: Mapped[str] = mapped_column(unique=True)
     phone: Mapped[Optional[str]]
     linkedin: Mapped[str]
     role: Mapped[str]
@@ -23,7 +27,7 @@ class Contact(Base):
     company: Mapped["Company"] = relationship(back_populates="contacts")
 
 
-class Company(Base):
+class Company(db.Model):
     __tablename__ = "companies"
     id: Mapped[int] = mapped_column(primary_key=True)
 
