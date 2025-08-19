@@ -19,9 +19,9 @@ class Contact(db.Model):
     firstname: Mapped[str]
     lastname: Mapped[str]
     email: Mapped[str] = mapped_column(unique=True)
-    phone: Mapped[Optional[str]]
-    linkedin: Mapped[str]
-    role: Mapped[str]
+    phone: Mapped[Optional[str]] = mapped_column(nullable=True)
+    linkedin: Mapped[Optional[str]] = mapped_column(nullable=True)
+    role: Mapped[Optional[str]] = mapped_column(nullable=True)
 
     company_id: Mapped[int] = mapped_column(ForeignKey("companies.id"))
     company: Mapped["Company"] = relationship(back_populates="contacts")
