@@ -1,9 +1,16 @@
-from flask import request, jsonify
+from flask import abort, request, jsonify
 from models import db, Contact, Company
 from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 
 def register_routes(app):
+    # Fetch an item from the database by ID
+    def fetch_by_id(model, data: dict):
+        id = data.get("id")
+        if not id:
+            abort(400, description="id is required")
+        return db.get_or_404(model, id)
+
     @app.errorhandler(ValueError)
     def handle_value_error(e):
         return jsonify({"error": str(e)}), 400
@@ -67,3 +74,28 @@ def register_routes(app):
             jsonify({"id": new_contact.id, "message": "Contact created successfully"}),
             201,
         )
+
+    @app.route("/contacts/update", methods=["PUT"])
+    def update_contact():
+        data: dict = request.get_json()
+        contact: Contact = fetch_by_id(Contact, data)
+
+        for field in [
+            "firstname",
+            "lastname",
+            "email",
+            "phone",
+            "linkedin",
+            "role",
+            "company_id",
+        ]:
+            if field in data:
+                setattr(contact, field, data[field])
+
+        if "firstname" in data or "lastname" in data:
+            new_firstname = data.get("firstname", contact.firstname)
+            new_lastname = data.get("lastname", contact.lastname)
+            contact.fullname = f"{new_firstname} {new_lastname}"
+        db.session.commit()
+
+        return jsonify({"message": "Contact updated successfully"}), 200
