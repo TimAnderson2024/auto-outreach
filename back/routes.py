@@ -71,7 +71,7 @@ def register_routes(app):
         data: dict = request.get_json()
         contact: Contact = fetch_by_id(Contact, data)
 
-        for field in [
+        to_update = [
             "firstname",
             "lastname",
             "email",
@@ -79,9 +79,8 @@ def register_routes(app):
             "linkedin",
             "role",
             "company_id",
-        ]:
-            if field in data:
-                setattr(contact, field, data[field])
+        ]
+        update_attributes(to_update, data, contact)
 
         if "firstname" in data or "lastname" in data:
             new_firstname = data.get("firstname", contact.firstname)
@@ -118,6 +117,59 @@ def register_routes(app):
             "name": company.name,
             "industry": company.industry,
         }
+
+    @app.route("/companies", methods=["POST"])
+    def create_company():
+        data: dict = request.get_json()
+
+        required_fields = ["name", "industry"]
+        missing = [field for field in required_fields if not data.get(field)]
+        if missing:
+            return (
+                jsonify({"error": f"Missing required fields: {', '.join(missing)}"}),
+                400,
+            )
+
+        new_company = Company(name=data["name"], industry=data["industry"])
+        db.session.add(new_company)
+        db.session.commit()
+        return (
+            jsonify({"id": new_company.id, "message": "Contact created successfully"}),
+            201,
+        )
+
+    @app.route("/companies", methods=["PUT"])
+    def update_company():
+        data: dict = request.get_json()
+        company: Company = fetch_by_id(Company, data)
+
+        update_attributes(["name", "industry"], data, company)
+
+        db.session.commit()
+        return jsonify({"message": "Company updated successfully"}), 200
+
+    # Delete a company and all of its employees
+    @app.route("/companies", methods=["DELETE"])
+    def delete_company():
+        data: dict = request.get_json()
+        company: Company = fetch_by_id(Company, data)
+
+        # Delete contacts, then company
+        for contact in list(company.contacts):
+            db.session.delete(contact)
+        db.session.delete(company)
+        db.session.commit()
+
+        return (
+            jsonify({"message": "Company and related contacts deleted successfully"}),
+            200,
+        )
+
+    # Update old_data with all matching attributes in new_data
+    def update_attributes(attributes: list, new_data, old_data):
+        for field in attributes:
+            if field in new_data:
+                setattr(old_data, field, new_data[field])
 
     # Fetch an item from the database by ID
     def fetch_by_id(model, data: dict):

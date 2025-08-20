@@ -187,3 +187,91 @@ def test_get_contacts(client):
     data = response.get_json()
     assert isinstance(data, list)
     assert any(c["firstname"] == "Dan" for c in data)
+
+
+def test_create_company_success(client):
+    response = client.post(
+        "/companies",
+        json={"name": "Acme Inc", "industry": "Manufacturing"},
+    )
+    assert response.status_code == 201
+    data = response.get_json()
+    assert "id" in data
+    assert data["message"] == "Contact created successfully"
+
+
+def test_create_company_missing_fields(client):
+    response = client.post(
+        "/companies",
+        json={"name": "NoIndustry"},
+    )
+    assert response.status_code == 400
+    data = response.get_json()
+    assert "error" in data
+
+
+def test_get_companies(client):
+    # Add a company
+    with app.app_context():
+        company = Company(name="GetCo", industry="Tech")
+        db.session.add(company)
+        db.session.commit()
+
+    response = client.get("/companies", query_string={"name": "GetCo"})
+    assert response.status_code == 200
+    data = response.get_json()
+    assert isinstance(data, list)
+    assert any(c["name"] == "GetCo" for c in data)
+
+
+def test_update_company_success(client):
+    # Add a company
+    with app.app_context():
+        company = Company(name="OldName", industry="OldIndustry")
+        db.session.add(company)
+        db.session.commit()
+        company_id = company.id
+
+    response = client.put(
+        "/companies",
+        json={"id": company_id, "name": "NewName", "industry": "NewIndustry"},
+    )
+    assert response.status_code == 200 or response.status_code == 204
+    with app.app_context():
+        updated = db.session.get(Company, company_id)
+        assert updated.name == "NewName"
+        assert updated.industry == "NewIndustry"
+
+
+def test_delete_company_success(client):
+    # Add a company and a contact
+    with app.app_context():
+        company = Company(name="DeleteMe", industry="Tech")
+        db.session.add(company)
+        db.session.commit()
+        company_id = company.id
+        contact = Contact(
+            fullname="John Doe",
+            firstname="John",
+            lastname="Doe",
+            email="john@example.com",
+            company_id=company_id,
+        )
+        db.session.add(contact)
+        db.session.commit()
+        contact_id = contact.id
+
+    # Delete the company
+    response = client.delete(
+        "/companies",
+        json={"id": company_id},
+    )
+    assert response.status_code == 200
+    data = response.get_json()
+    assert "message" in data
+    # Verify company and contact are deleted
+    with app.app_context():
+        deleted_company = db.session.get(Company, company_id)
+        deleted_contact = db.session.get(Contact, contact_id)
+        assert deleted_company is None
+        assert deleted_contact is None

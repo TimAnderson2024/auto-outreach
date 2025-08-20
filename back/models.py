@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import List, Optional
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import Mapped, DeclarativeBase, mapped_column, relationship
@@ -34,4 +34,4 @@ class Company(db.Model):
     name: Mapped[str]
     industry: Mapped[str]
 
-    contacts: Mapped["Contact"] = relationship(back_populates="company")
+    contacts: Mapped[List["Contact"]] = relationship(back_populates="company")
