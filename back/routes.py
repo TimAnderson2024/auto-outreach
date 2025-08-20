@@ -4,31 +4,22 @@ from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 
 def register_routes(app):
-    # Fetch an item from the database by ID
-    def fetch_by_id(model, data: dict):
-        id = data.get("id")
-        if not id:
-            abort(400, description="id is required")
-        return db.get_or_404(model, id)
 
     @app.errorhandler(ValueError)
     def handle_value_error(e):
         return jsonify({"error": str(e)}), 400
 
-    @app.route("/contacts", methods=["POST"])
+    @app.route("/contacts")
     def get_contacts():
         # Create filter from HTTP request
         filter_by = ["firstname", "lastname", "company_id", "email", "role"]
-        filters = {}
-        for field in filter_by:
-            field_value = request.args.get(field)
-
-            if field_value is not None:
-                filters[field] = field_value
+        filters = build_filter(filter_by, request.args)
 
         # Send the query and convert to dict
-        contacts = Contact.query.filter_by(**filters).all()
-        contacts = [contact_to_dict(contact) for contact in contacts]
+        contacts = [
+            contact_to_dict(contact)
+            for contact in Contact.query.filter_by(**filters).all()
+        ]
 
         return jsonify(contacts), 200
 
@@ -45,7 +36,7 @@ def register_routes(app):
             "company_id": contact.company_id,
         }
 
-    @app.route("/contacts/create", methods=["POST"])
+    @app.route("/contacts", methods=["POST"])
     def create_contact():
         data: dict = request.get_json()
 
@@ -75,7 +66,7 @@ def register_routes(app):
             201,
         )
 
-    @app.route("/contacts/update", methods=["PUT"])
+    @app.route("/contacts", methods=["PUT"])
     def update_contact():
         data: dict = request.get_json()
         contact: Contact = fetch_by_id(Contact, data)
@@ -100,7 +91,7 @@ def register_routes(app):
 
         return jsonify({"message": "Contact updated successfully"}), 200
 
-    @app.route("/contacts/delete", methods=["DELETE"])
+    @app.route("/contacts", methods=["DELETE"])
     def delete_contact():
         data: dict = request.get_json()
         contact: Contact = fetch_by_id(Contact, data)
@@ -108,3 +99,39 @@ def register_routes(app):
         db.session.delete(contact)
         db.session.commit()
         return jsonify({"message": "Contact deleted successfully"}), 200
+
+    @app.route("/companies")
+    def get_companies():
+        filter_by = ["name", "industry"]
+        filter = build_filter(filter_by, request.args)
+
+        companies = [
+            company_to_dict(company)
+            for company in Company.query.filter_by(**filter).all()
+        ]
+
+        return jsonify(companies), 200
+
+    def company_to_dict(company: Company):
+        return {
+            "id": company.id,
+            "name": company.name,
+            "industry": company.industry,
+        }
+
+    # Fetch an item from the database by ID
+    def fetch_by_id(model, data: dict):
+        id = data.get("id")
+        if not id:
+            abort(400, description="id is required")
+        return db.get_or_404(model, id)
+
+    # Build the filter list given the request
+    def build_filter(all_filters, request_filters: dict):
+        filters = {}
+        for field in all_filters:
+            field_value = request_filters.get(field)
+
+            if field_value is not None:
+                filters[field] = field_value
+        return filters

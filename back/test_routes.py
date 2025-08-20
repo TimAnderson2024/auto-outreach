@@ -22,7 +22,7 @@ def test_delete_contact_success(client):
 
     # Delete the contact
     response = client.delete(
-        "/contacts/delete",
+        "/contacts",
         json={"id": contact_id},
     )
     assert response.status_code == 200
@@ -37,7 +37,7 @@ def test_delete_contact_success(client):
 
 def test_delete_contact_missing_id(client):
     response = client.delete(
-        "/contacts/delete",
+        "/contacts",
         json={},
     )
     assert response.status_code == 400
@@ -45,7 +45,7 @@ def test_delete_contact_missing_id(client):
 
 def test_delete_contact_not_found(client):
     response = client.delete(
-        "/contacts/delete",
+        "/contacts",
         json={"id": 9999},
     )
     assert response.status_code == 404
@@ -70,7 +70,7 @@ def test_update_contact_success(client):
 
     # Update firstname and check fullname
     response = client.put(
-        "/contacts/update",
+        "/contacts",
         json={"id": contact_id, "firstname": "Janet"},
     )
     assert response.status_code == 200
@@ -85,7 +85,7 @@ def test_update_contact_success(client):
 
     # Update lastname and check fullname
     response = client.put(
-        "/contacts/update",
+        "/contacts",
         json={"id": contact_id, "lastname": "Smith"},
     )
     assert response.status_code == 200
@@ -97,7 +97,7 @@ def test_update_contact_success(client):
 
 def test_update_contact_missing_id(client):
     response = client.put(
-        "/contacts/update",
+        "/contacts",
         json={"firstname": "NoId"},
     )
     assert response.status_code == 400
@@ -105,7 +105,7 @@ def test_update_contact_missing_id(client):
 
 def test_update_contact_not_found(client):
     response = client.put(
-        "/contacts/update",
+        "/contacts",
         json={"id": 9999, "firstname": "Ghost"},
     )
     assert response.status_code == 404
@@ -131,7 +131,7 @@ def test_create_contact_success(client):
         company_id = company.id
 
     response = client.post(
-        "/contacts/create",
+        "/contacts",
         json={
             "firstname": "Alice",
             "lastname": "Smith",
@@ -147,7 +147,7 @@ def test_create_contact_success(client):
 
 def test_create_contact_no_company(client):
     response = client.post(
-        "/contacts/create",
+        "/contacts",
         json={"firstname": "Bob", "lastname": "Jones", "email": "bob@example.com"},
     )
     assert response.status_code == 400
@@ -155,7 +155,7 @@ def test_create_contact_no_company(client):
 
 def test_create_contact_company_not_exist(client):
     response = client.post(
-        "/contacts/create",
+        "/contacts",
         json={
             "firstname": "Carol",
             "lastname": "White",
@@ -182,7 +182,7 @@ def test_get_contacts(client):
         db.session.add(contact)
         db.session.commit()
 
-    response = client.post("/contacts", query_string={"firstname": "Dan"})
+    response = client.get("/contacts", query_string={"firstname": "Dan"})
     assert response.status_code == 200
     data = response.get_json()
     assert isinstance(data, list)
