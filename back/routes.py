@@ -1,6 +1,5 @@
 from flask import abort, request, jsonify
 from models import db, Contact, Company
-from sqlalchemy.orm.exc import NoResultFound, MultipleResultsFound
 
 
 def register_routes(app):
