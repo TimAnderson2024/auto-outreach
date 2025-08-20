@@ -99,3 +99,12 @@ def register_routes(app):
         db.session.commit()
 
         return jsonify({"message": "Contact updated successfully"}), 200
+
+    @app.route("/contacts/delete", methods=["DELETE"])
+    def delete_contact():
+        data: dict = request.get_json()
+        contact: Contact = fetch_by_id(Contact, data)
+
+        db.session.delete(contact)
+        db.session.commit()
+        return jsonify({"message": "Contact deleted successfully"}), 200

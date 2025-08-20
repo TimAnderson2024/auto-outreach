@@ -3,6 +3,54 @@ from app import app, db
 from models import Contact, Company
 
 
+def test_delete_contact_success(client):
+    # Create a company and contact
+    with app.app_context():
+        company = Company(name="DeleteCo", industry="Tech")
+        db.session.add(company)
+        db.session.commit()
+        contact = Contact(
+            fullname="Mark Twain",
+            firstname="Mark",
+            lastname="Twain",
+            email="mark@example.com",
+            company_id=company.id,
+        )
+        db.session.add(contact)
+        db.session.commit()
+        contact_id = contact.id
+
+    # Delete the contact
+    response = client.delete(
+        "/contacts/delete",
+        json={"id": contact_id},
+    )
+    assert response.status_code == 200
+    data = response.get_json()
+    assert data["message"] == "Contact deleted successfully"
+
+    # Verify contact is deleted
+    with app.app_context():
+        deleted = db.session.get(Contact, contact_id)
+        assert deleted is None
+
+
+def test_delete_contact_missing_id(client):
+    response = client.delete(
+        "/contacts/delete",
+        json={},
+    )
+    assert response.status_code == 400
+
+
+def test_delete_contact_not_found(client):
+    response = client.delete(
+        "/contacts/delete",
+        json={"id": 9999},
+    )
+    assert response.status_code == 404
+
+
 def test_update_contact_success(client):
     # Create a company and contact
     with app.app_context():
