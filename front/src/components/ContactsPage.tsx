@@ -6,6 +6,7 @@ import SortMenu from "./SortMenu";
 
 import type { Contact } from "../services/ContactService";
 import ContactService from "../services/ContactService";
+import PaginationControls from "./PaginationControls";
 
 function ContactsPage() {
     const [contacts, setContacts] = useState<Contact[]>([]);
@@ -19,7 +20,10 @@ function ContactsPage() {
 
     return (
         <TemplatePage>
-            <SortMenu/>
+            <div className="d-flex justify-content-between align-items-center">
+                <SortMenu/>
+                <PaginationControls/>
+            </div>
             <hr/>   
             {loading ? (
                 <div>Loading contacts...</div>
