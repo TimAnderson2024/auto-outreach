@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
+
 import TemplatePage from "./TemplatePage";
 import ContactCard from "./ContactCard";
+import SortMenu from "./SortMenu";
+
 import type { Contact } from "../services/ContactService";
 import ContactService from "../services/ContactService";
 
@@ -16,6 +19,8 @@ function ContactsPage() {
 
     return (
         <TemplatePage>
+            <SortMenu/>
+            <hr/>   
             {loading ? (
                 <div>Loading contacts...</div>
             ) : (
