@@ -20,9 +20,12 @@ function ContactCard({ contact }: ContactCardProps) {
             <Col sm={2} className="text-truncate">
                 {contact.phone}
             </Col>
-            <Col sm={1}>
-                <Button className="ms-auto d-block" variant="outline-danger" size="sm">
-                    Delete
+            <Col sm={1} className="d-flex gap-1 justify-content-end">
+                <Button variant="outline-primary" size="sm" title="Edit contact">
+                    <i className="bi bi-pencil"></i>
+                </Button>
+                <Button variant="outline-danger" size="sm" title="Delete contact">
+                    <i className="bi bi-trash"></i>
                 </Button>
             </Col>
         </Row>
