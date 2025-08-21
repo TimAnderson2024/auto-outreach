@@ -8,12 +8,16 @@ interface TemplatePageProps {
 
 function TemplatePage({ children }: TemplatePageProps) {
   return (
-    <Container fluid>
-        <Header />
-        <hr className="mt-2" />
-        {children}
-        <hr />
-    </Container>
+    <>
+      <Container fluid className="mb-4"> 
+        <Header/> 
+      </Container>
+      <Container fluid className="mx-auto" style={{ maxWidth: "1600px" }}>
+        <div className="p-3">
+          {children}
+        </div>
+      </Container>
+    </>
   );
 }
 

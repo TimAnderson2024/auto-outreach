@@ -1,11 +1,9 @@
-import TemplatePage from './components/TemplatePage'
+import ContactsPage from './components/ContactsPage.tsx';
 
 function App() {
   return (
     <>
-      <TemplatePage>
-        <h1>Hello, world!</h1>
-      </TemplatePage>
+      <ContactsPage />
     </>
   )
 }
