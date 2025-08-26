@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Row, Col } from "react-bootstrap";
 
 import TemplatePage from "./TemplatePage";
 import ContactCard from "./ContactCard";
@@ -43,6 +44,17 @@ function ContactsPage() {
         <PaginationControls />
       </div>
       <hr />
+      <Row className="align-items-center py-2 border-bottom bg-light fw-bold">
+        <Col sm={2}>Company</Col>
+        <Col sm={2}>Name</Col>
+        <Col sm={2}>Email</Col>
+        <Col sm={1}>First Contact</Col>
+        <Col sm={1}>Booster Check</Col>
+        <Col sm={1} className="text-nowrap">
+          Follow-Up Date
+        </Col>
+        <Col sm="auto" />
+      </Row>
       {loading ? (
         <div>Loading contacts...</div>
       ) : (

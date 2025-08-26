@@ -19,6 +19,8 @@
 
 ## 📌 Notes
 
+- Sort utils seem like they can be made generic
+
 ---
 
 ## ✅ Done
