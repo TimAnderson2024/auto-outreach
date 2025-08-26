@@ -1,11 +1,12 @@
-import ContactsPage from './components/ContactsPage.tsx';
+import ContactsPage from "./pages/ContactsPage.tsx";
+import CompanyPage from "./pages/CompanyPage.tsx";
 
 function App() {
   return (
     <>
-      <ContactsPage />
+      <CompanyPage />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

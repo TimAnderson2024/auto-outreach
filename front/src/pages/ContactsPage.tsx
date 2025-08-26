@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { Row, Col } from "react-bootstrap";
 
 import TemplatePage from "./TemplatePage";
-import ContactCard from "./ContactCard";
-import SortMenu from "./SortMenu";
-import PaginationControls from "./PaginationControls";
+import ContactCard from "../components/ContactCard";
+import SortMenu from "../components/SortMenu";
+import PaginationControls from "../components/PaginationControls";
 
 import type { Contact } from "../services/ContactService";
 import { ContactSortFields } from "../services/ContactService";
