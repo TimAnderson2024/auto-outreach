@@ -9,6 +9,15 @@ export interface Contact {
     company: string;
 }
 
+import type { SortOption } from "../utils/SortUtils";
+
+export const ContactSortFields: SortOption[] = [
+    {label: "First Name", value: "firstName"},
+    {label: "Last Name", value: "lastName"},
+    {label: "Company", value: "company"}
+]
+
+
 class ContactService {
     private dummyContacts: Contact[] = [
         {
