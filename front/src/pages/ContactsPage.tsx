@@ -1,17 +1,22 @@
 import { useState, useEffect } from "react";
-import { Row, Col } from "react-bootstrap";
 
-import TemplatePage from "./TemplatePage";
-import ContactCard from "../components/ContactCard";
-import SortMenu from "../components/SortMenu";
-import PaginationControls from "../components/PaginationControls";
-
+// Custom Types
+import type { Column } from "../components/ContactTable";
 import type { Contact } from "../services/ContactService";
+import type { SortOption } from "../utils/SortUtils";
+
+// Constants
+import { SortDirs } from "../utils/SortUtils";
 import { ContactSortFields } from "../services/ContactService";
+
+// Services
 import ContactService from "../services/ContactService";
 
-import type { SortOption } from "../utils/SortUtils";
-import { SortDirs } from "../utils/SortUtils";
+// Custom Components
+import TemplatePage from "./TemplatePage";
+import ContactTable from "../components/ContactTable";
+import SortMenu from "../components/SortMenu";
+import PaginationControls from "../components/PaginationControls";
 
 function ContactsPage() {
   const [contacts, setContacts] = useState<Contact[]>([]);
@@ -31,6 +36,15 @@ function ContactsPage() {
     setContacts(ContactService.getContacts(newField, newDir));
   };
 
+  const columns: Column[] = [
+    { label: "Company", key: "company" },
+    { label: "Name", key: "fullName" },
+    { label: "Email", key: "email" },
+    { label: "Outreach", key: "firstContact" },
+    { label: "Booster Check", key: "boosterCheck" },
+    { label: "Follow-Up", key: "followupDate" },
+  ];
+
   return (
     <TemplatePage>
       <div className="d-flex justify-content-between align-items-center">
@@ -44,23 +58,10 @@ function ContactsPage() {
         <PaginationControls />
       </div>
       <hr />
-      <Row className="align-items-center py-2 border-bottom bg-light fw-bold">
-        <Col sm={2}>Company</Col>
-        <Col sm={2}>Name</Col>
-        <Col sm={2}>Email</Col>
-        <Col sm={1}>First Contact</Col>
-        <Col sm={1}>Booster Check</Col>
-        <Col sm={1} className="text-nowrap">
-          Follow-Up Date
-        </Col>
-        <Col sm="auto" />
-      </Row>
       {loading ? (
-        <div>Loading contacts...</div>
+        "Loading Contacts..."
       ) : (
-        contacts.map((contact) => (
-          <ContactCard key={contact.id} contact={contact} />
-        ))
+        <ContactTable columns={columns} contacts={contacts} />
       )}
     </TemplatePage>
   );
