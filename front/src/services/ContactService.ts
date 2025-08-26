@@ -34,12 +34,15 @@ export const ContactSortFields: SortOption[] = [
     {label: "Company", value: "company"},
     {label: "First Name", value: "firstName"},
     {label: "Last Name", value: "lastName"},
+    {label: "Contact Date", value:"firstContact"},
 ]
 
 class ContactService {
     private dummyContacts: Contact[] = (() => {
         // Use a fixed firstContact date for demo purposes
         const baseDate = new Date('2025-08-26T09:00:00');
+        const baseDate2 = new Date('2025-08-27T09:00:00');
+        const baseDate3 = new Date('2025-08-28T09:00:00');
         return [
             {
                 id: 1,
@@ -76,9 +79,9 @@ class ContactService {
                 phone: "(555) 456-7890",
                 linkedIn: "https://linkedin.com/in/michaelchen",
                 company: "StartupX",
-                firstContact: baseDate,
-                boosterCheck: addBusinessDays(baseDate, 3),
-                followupDate: addBusinessDays(baseDate, 7),
+                firstContact: baseDate2,
+                boosterCheck: addBusinessDays(baseDate2, 3),
+                followupDate: addBusinessDays(baseDate2, 7),
             },
             {
                 id: 4,
@@ -89,9 +92,9 @@ class ContactService {
                 phone: "(555) 321-9876",
                 linkedIn: "https://linkedin.com/in/emilyrodriguez",
                 company: "Global Tech Networks",
-                firstContact: baseDate,
-                boosterCheck: addBusinessDays(baseDate, 3),
-                followupDate: addBusinessDays(baseDate, 7),
+                firstContact: baseDate2,
+                boosterCheck: addBusinessDays(baseDate2, 3),
+                followupDate: addBusinessDays(baseDate2, 7),
             },
             {
                 id: 5,
@@ -102,9 +105,9 @@ class ContactService {
                 phone: "(555) 654-3210",
                 linkedIn: "https://linkedin.com/in/davidwilson",
                 company: "FinancePlus",
-                firstContact: baseDate,
-                boosterCheck: addBusinessDays(baseDate, 3),
-                followupDate: addBusinessDays(baseDate, 7),
+                firstContact: baseDate2,
+                boosterCheck: addBusinessDays(baseDate2, 3),
+                followupDate: addBusinessDays(baseDate2, 7),
             },
             {
                 id: 6,
@@ -115,9 +118,9 @@ class ContactService {
                 phone: "(555) 789-0123",
                 linkedIn: "https://linkedin.com/in/lisathompson",
                 company: "Marketing Pro",
-                firstContact: baseDate,
-                boosterCheck: addBusinessDays(baseDate, 3),
-                followupDate: addBusinessDays(baseDate, 7),
+                firstContact: baseDate3,
+                boosterCheck: addBusinessDays(baseDate3, 3),
+                followupDate: addBusinessDays(baseDate3, 7),
             }
         ];
     })();
