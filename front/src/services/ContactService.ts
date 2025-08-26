@@ -1,3 +1,6 @@
+import type { SortOption } from "../utils/SortUtils";
+import { SortDirs } from "../utils/SortUtils"
+
 export interface Contact {
     id: number;
     fullName: string;
@@ -12,9 +15,14 @@ export interface Contact {
     followupDate: Date;
 }
 
+// First option listed is the "default" sort option
+export const ContactSortFields: SortOption[] = [
+    {label: "Company", value: "company"},
+    {label: "First Name", value: "firstName"},
+    {label: "Last Name", value: "lastName"},
+    {label: "Contact Date", value:"firstContact"},
+]
 
-import type { SortOption } from "../utils/SortUtils";
-import { SortDirs } from "../utils/SortUtils"
 
 // Helper function outside the class to avoid recursion
 function addBusinessDays(date: Date, days: number): Date {
@@ -29,13 +37,7 @@ function addBusinessDays(date: Date, days: number): Date {
     return result;
 }
 
-// First option listed is the "default" sort option
-export const ContactSortFields: SortOption[] = [
-    {label: "Company", value: "company"},
-    {label: "First Name", value: "firstName"},
-    {label: "Last Name", value: "lastName"},
-    {label: "Contact Date", value:"firstContact"},
-]
+
 
 class ContactService {
     private dummyContacts: Contact[] = (() => {
