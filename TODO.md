@@ -2,8 +2,6 @@
 
 ## 🚧 Currently In Progress
 
-- [ ] Rewrite SortMenu to be generic
-- [ ] Implement dynamic sorting for ContactsPage
 - [ ] Dynamically fetch Contacts from backend
 - [ ] CRUD methods for contacts: Create, Update, Delete
 
@@ -24,3 +22,6 @@
 ---
 
 ## ✅ Done
+
+- [x] Implement dynamic sorting for ContactsPage
+- [x] Rewrite SortMenu to be generic (controlled component of parent)

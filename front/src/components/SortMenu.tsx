@@ -1,58 +1,53 @@
-import { useState } from "react";
 import Container from "react-bootstrap/Container";
 import Dropdown from "react-bootstrap/esm/Dropdown";
 import DropdownButton from "react-bootstrap/esm/DropdownButton";
 
-import type { SortOption, SortChange } from "../utils/SortUtils";
-import { sortDirs } from "../utils/SortUtils";
+import type { SortOption } from "../utils/SortUtils";
 
 interface sortMenuProps {
-  sortFields: SortOption[]; // The field to sort on
-  onSortChange: (value: SortChange) => void;
+  curField: SortOption;
+  curDir: SortOption;
+  allFields: SortOption[];
+  allDirs: SortOption[];
+  onSortChange: (newField: SortOption, newDir: SortOption) => void;
 }
 
-function SortMenu({ sortFields, onSortChange }: sortMenuProps) {
-  const [sortField, setSortField] = useState(sortFields[0]);
-  const [sortDir, setSortDir] = useState(sortDirs[0]);
-
-  const handleSortChange = (
-    newSortField: SortOption,
-    newSortDir: SortOption
-  ) => {
-    setSortField(newSortField);
-    setSortDir(newSortDir);
-    onSortChange({ field: sortField.value, dir: sortDir.value });
-  };
-
+function SortMenu({
+  curField,
+  curDir,
+  allFields,
+  allDirs,
+  onSortChange,
+}: sortMenuProps) {
   return (
     <Container className="d-flex justify-content-start ms-0 ps-0 align-items-center">
       <span className="align-middle me-2">Sort Contacts By</span>
       <DropdownButton
         id="dropdown-basic-button"
-        title={`${sortField.label}`}
+        title={`${curField.label}`}
         size="sm"
       >
-        {sortFields.map((sortField) => (
+        {allFields.map((field: SortOption) => (
           <Dropdown.Item
-            key={sortField.value}
-            onClick={() => handleSortChange(sortField, sortDir)}
+            key={field.value}
+            onClick={() => onSortChange(field, curDir)}
           >
-            {sortField.label}
+            {field.label}
           </Dropdown.Item>
         ))}
       </DropdownButton>
       <span className="align-middle ms-2 me-2">:</span>
       <DropdownButton
         id="dropdown-basic-button"
-        title={`${sortDir.label}`}
+        title={`${curDir.label}`}
         size="sm"
       >
-        {sortDirs.map((sortDir) => (
+        {allDirs.map((dir) => (
           <Dropdown.Item
-            key={sortDir.value}
-            onClick={() => handleSortChange(sortField, sortDir)}
+            key={dir.value}
+            onClick={() => onSortChange(curField, dir)}
           >
-            {sortDir.label}
+            {dir.label}
           </Dropdown.Item>
         ))}
       </DropdownButton>

@@ -10,13 +10,14 @@ export interface Contact {
 }
 
 import type { SortOption } from "../utils/SortUtils";
+import { SortDirs } from "../utils/SortUtils"
 
+// First option listed is the "default" sort option
 export const ContactSortFields: SortOption[] = [
+    {label: "Company", value: "company"},
     {label: "First Name", value: "firstName"},
     {label: "Last Name", value: "lastName"},
-    {label: "Company", value: "company"}
 ]
-
 
 class ContactService {
     private dummyContacts: Contact[] = [
@@ -82,12 +83,22 @@ class ContactService {
         }
     ];
 
-    getContacts(): Contact[] {
-        return this.dummyContacts;
+    getContacts(sortField: SortOption = ContactSortFields[0], sortDir: SortOption = SortDirs[0]): Contact[] {
+        return this.sortContacts(this.dummyContacts, sortField.value, sortDir.value);
     }
 
     getContactById(id: number): Contact | undefined {
         return this.dummyContacts.find(contact => contact.id === id);
+    }
+
+    sortContacts(unsorted: Contact[], newField: String, newDir: String): Contact[] {
+        const sortField = newField as keyof Contact
+        const sorted = [...unsorted].sort((a, b) => {
+            if (a[sortField] < b[sortField]) return newDir === "asc" ? -1 : 1;
+            if (a[sortField] > b[sortField]) return newDir === "asc" ? 1 : -1;
+            return 0;
+        }); 
+        return sorted
     }
 }
 
