@@ -2,7 +2,7 @@
 
 ## 🚧 Currently In Progress
 
-- [ ] Dynamically fetch Contacts from backend
+- [ ] Dynamically fetch Contacts/Companies from backend
 - [ ] CRUD methods for contacts: Create, Update, Delete
 
 ## 🆕 Backlog (ideas to explore)
@@ -15,6 +15,8 @@
 
 ## 🐛 Known Bugs
 
+- [ ] ContactTable columns not aligned between Accordions in CompanyView
+
 ---
 
 ## 📌 Notes
@@ -25,5 +27,6 @@
 
 ## ✅ Done
 
+- [x] Generic contact table to drop into Company and Contact view
 - [x] Implement dynamic sorting for ContactsPage
 - [x] Rewrite SortMenu to be generic (controlled component of parent)
