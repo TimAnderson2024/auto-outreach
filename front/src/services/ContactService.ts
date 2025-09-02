@@ -3,9 +3,7 @@ import type { SortOption } from "../utils/SortUtils";
 
 export interface Contact {
     id: number;
-    fullName: string;
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
     phone: string;
     linkedIn: string;

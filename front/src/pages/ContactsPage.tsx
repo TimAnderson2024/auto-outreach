@@ -50,7 +50,7 @@ function ContactsPage() {
 
   const columns: Column[] = [
     { label: "Company", key: "company" },
-    { label: "Name", key: "fullName" },
+    { label: "Name", key: "name" },
     { label: "Email", key: "email" },
     { label: "Outreach", key: "firstContact" },
     { label: "Booster Check", key: "boosterCheck" },
