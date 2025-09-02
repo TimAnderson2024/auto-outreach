@@ -25,15 +25,27 @@ function ContactsPage() {
   const [sortDir, setSortDir] = useState<SortOption>(SortDirs[0]);
 
   useEffect(() => {
+    async function fetchContacts() {
+      const contacts = await ContactService.getContacts({});
+      setContacts(contacts);
+    }
     setLoading(true);
-    setContacts(ContactService.getContacts());
+    fetchContacts();
     setLoading(false);
   }, []);
 
   const handleSortChange = (newField: SortOption, newDir: SortOption) => {
     setSortField(newField);
+
     setSortDir(newDir);
-    setContacts(ContactService.getContacts(newField, newDir));
+    async function fetchContacts() {
+      const contacts = await ContactService.getContacts({
+        sortField: newField,
+        sortDir: newDir
+      });
+      setContacts(contacts);
+    }
+    fetchContacts();
   };
 
   const columns: Column[] = [
